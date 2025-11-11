@@ -7,7 +7,7 @@
 // Confirm “session connected” appears when client connects.
 
 import { WebTransportServer } from '@fails-components/webtransport';
-import {logInfo, logError, createSpinner} from './core/logger.js';
+import {logInfo, logError, createSpinner, logWarn} from './core/logger.js';
 import {fs} from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -24,8 +24,8 @@ if(!fs.existsSync(cert.pem) || !fs.existsSync(key.pem)){
 
 const server = new WebTransportServer({
     port: 4999,
-    cert: fs.readFileSync('./cert/pem'),
-    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync(certPath),
+    key: fs.readFileSync(keyPath),
     path: '/wt'
 })
 
@@ -34,7 +34,28 @@ const spinner = createSpinner('Starting WebTransport server...').start();
 server.on('listening', () => {
     spinner.succeed(`Listening on https://localhost:4999/wt`);
     logInfo('QUIC + HTTP/3 ready. Waiting for clients...');
-})
+});
+
+server.on('session', async(session) => {
+    const session_id = session.id.slice(0,8);
+    logInfo(`New Session: ${session_id}`);
+
+
+server.on('close', () => {
+    logWarn(`Session closed: ${sessionId}`);
+});
+
+server.on('datagram',(datagram) =>{
+    logInfo(`Datagram (length : ${datagram.length} bytes): ${datagram.toString().slice(0,50)}...`);
+});
+
+});
+
+server.on('error', (err) => {
+    logError(`Server error: ${err.message}`);
+  });
+
+server.listen();
 
 
 
