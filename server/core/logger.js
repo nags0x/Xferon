@@ -1,5 +1,3 @@
-// Configures chalk + winston (placeholder)
-
 import chalk from 'chalk';
 import winston from 'winston';
 import ora from 'ora';
@@ -7,6 +5,7 @@ import ora from 'ora';
 const logger = winston.createLogger({
     level: "info",
     format: winston.format.combine(
+        //chain_multiFormats
         winston.format.timestamp({format: "Hh:mm:ss"}),
         winston.format.printf(({level, message, timestamp}) => {
             return `[${timestamp}] ${level.toUpperCase()} - ${message}`;
