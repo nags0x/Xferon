@@ -1,5 +1,6 @@
 {
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@fails-components/webtransport": "^1.4.4"
+  }
 }
-
-
