@@ -55,7 +55,7 @@ server.ready.then(() => {
                 logError(`Session error: ${err.message}`);
             })
                 
-            const datagramReader = session.datagram.readable.getReader();
+            const datagramReader = session.datagrams.readable.getReader();
             (async ()=> {
                 while(true){
                     const {done, value} = await datagramReader.read();
